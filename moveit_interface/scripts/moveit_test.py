@@ -140,7 +140,7 @@ def go2pose(position_list):
         #group.execute(plan, wait=True)
         break
 
-def go2init_pose(position_list):
+def go2init_pose():
     moveit_commander.roscpp_initialize(sys.argv)
     rospy.init_node("movit_joint_test", anonymous=True)
     robot = moveit_commander.RobotCommander()
@@ -151,13 +151,14 @@ def go2init_pose(position_list):
         pose_goal = geometry_msgs.msg.Pose()
         current_pose = group.get_current_pose().pose
 
-        pose_goal.orientation.x = current_pose.orientation.x
-        pose_goal.orientation.y = current_pose.orientation.y
-        pose_goal.orientation.z = current_pose.orientation.z
-        pose_goal.orientation.w = current_pose.orientation.w
-        pose_goal.position.x = position_list[0]
-        pose_goal.position.y = position_list[1]
-        pose_goal.position.z = position_list[2]
+        pose_goal.orientation.x = 0.5147866096539608
+        pose_goal.orientation.y = 0.07352425677103026
+        pose_goal.orientation.z = 0.2379017918991315
+
+        pose_goal.orientation.w = -0.7037410864776212
+        pose_goal.position.x = 0.10089453311810097
+        pose_goal.position.y = 0.20061463041243796
+        pose_goal.position.z = 0.6740345291264079
 
         group.set_pose_target(pose_goal)
         plan = group.go(wait=True)
@@ -190,13 +191,13 @@ if __name__ == '__main__':
     # O end-effector comeca em 'A' e se move ao longo de um retangulo com lados zstep e ystep para, respectivamente, a altura e o comprimento, medidos em metros
     """
     # ideia: calcular outworkspace através do comprimento do robô
-    zstep=0.2
+    xstep=0.075
     ystep=0.2
 
-    pointA=[0.15499688221284214, 0.3258172746579836, 0.1389946113328881]
-    pointB=[pointA[0], pointA[1], pointA[2]+zstep]
+    pointA=[0.5147866096539608, 0.07352425677103026, 0.2379017918991315]
+    pointB=[pointA[0]+xstep, pointA[1], pointA[2]]
     pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
-    pointD=[pointC[0], pointC[1], pointC[2]-zstep]
+    pointD=[pointC[0]-xstep, pointC[1], pointC[2]]
 
     # go2position(pointA)
     # input('===Press enter to go to the next point===\n')
@@ -213,6 +214,8 @@ if __name__ == '__main__':
     # go2position(pointA)
     # print('Finished!!')
 
+    go2init_pose()
+
     go2pose(pointA)
     input('===Press enter to go to the next point===\n')
 
@@ -227,5 +230,4 @@ if __name__ == '__main__':
 
     go2pose(pointA)
     print('Finished!!')
-
-    # print_pose()
+    print_pose()
