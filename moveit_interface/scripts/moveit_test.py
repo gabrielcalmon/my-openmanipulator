@@ -94,7 +94,76 @@ def main2():
         plan = group.go(wait=True)
         group.stop()
         #group.clear_position_targets()
-        # group.execute(plan, wait=True)
+        #group.execute(plan, wait=True)
+        break
+
+def go2position(position_list):
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node("movit_joint_test", anonymous=True)
+    robot = moveit_commander.RobotCommander()
+    group_name = "arm"
+    group = moveit_commander.MoveGroupCommander(group_name)
+
+    while not rospy.is_shutdown():
+        group.set_position_target(position_list)
+        plan = group.go(wait=True)
+        group.stop()
+        #group.clear_position_targets()
+        #group.execute(plan, wait=True)
+        break
+    #print('========================================')
+    #print()
+
+def go2pose(position_list):
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node("movit_joint_test", anonymous=True)
+    robot = moveit_commander.RobotCommander()
+    group_name = "arm"
+    group = moveit_commander.MoveGroupCommander(group_name)
+
+    while not rospy.is_shutdown():
+        pose_goal = geometry_msgs.msg.Pose()
+        current_pose = group.get_current_pose().pose
+
+        pose_goal.orientation.x = current_pose.orientation.x
+        pose_goal.orientation.y = current_pose.orientation.y
+        pose_goal.orientation.z = current_pose.orientation.z
+        pose_goal.orientation.w = current_pose.orientation.w
+        pose_goal.position.x = position_list[0]
+        pose_goal.position.y = position_list[1]
+        pose_goal.position.z = position_list[2]
+
+        group.set_pose_target(pose_goal)
+        plan = group.go(wait=True)
+        group.stop()
+        #group.clear_position_targets()
+        #group.execute(plan, wait=True)
+        break
+
+def go2init_pose(position_list):
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node("movit_joint_test", anonymous=True)
+    robot = moveit_commander.RobotCommander()
+    group_name = "arm"
+    group = moveit_commander.MoveGroupCommander(group_name)
+
+    while not rospy.is_shutdown():
+        pose_goal = geometry_msgs.msg.Pose()
+        current_pose = group.get_current_pose().pose
+
+        pose_goal.orientation.x = current_pose.orientation.x
+        pose_goal.orientation.y = current_pose.orientation.y
+        pose_goal.orientation.z = current_pose.orientation.z
+        pose_goal.orientation.w = current_pose.orientation.w
+        pose_goal.position.x = position_list[0]
+        pose_goal.position.y = position_list[1]
+        pose_goal.position.z = position_list[2]
+
+        group.set_pose_target(pose_goal)
+        plan = group.go(wait=True)
+        group.stop()
+        #group.clear_position_targets()
+        #group.execute(plan, wait=True)
         break
 
 def print_pose():
@@ -112,12 +181,51 @@ def print_pose():
 
 if __name__ == '__main__':
     #main2()
+    """
+    C <- B
+    |    ^
+    v    |
+    D -> A
+
+    # O end-effector comeca em 'A' e se move ao longo de um retangulo com lados zstep e ystep para, respectivamente, a altura e o comprimento, medidos em metros
+    """
     # ideia: calcular outworkspace através do comprimento do robô
-    zstep=0.15
-    ystep=0.3
-    point1=[0.31238732139108205, 0.3144607016279254, 0.3532427239267847]
-    point2=[point1[0], point1[1], point1[2]+zstep]
-    # point1.position.x = 0.4132461918243058
-    # point1.position.x = 0.002251197407117802
-    # point1.position.x = 0.4419417336147707
-    print_pose()
+    zstep=0.2
+    ystep=0.2
+
+    pointA=[0.15499688221284214, 0.3258172746579836, 0.1389946113328881]
+    pointB=[pointA[0], pointA[1], pointA[2]+zstep]
+    pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
+    pointD=[pointC[0], pointC[1], pointC[2]-zstep]
+
+    # go2position(pointA)
+    # input('===Press enter to go to the next point===\n')
+
+    # go2position(pointB)
+    # input('===Press enter to go to the next point===\n')
+
+    # go2position(pointC)
+    # input('===Press enter to go to the next point===\n')
+
+    # go2position(pointD)
+    # input('===Press enter to go to the next point===\n')
+
+    # go2position(pointA)
+    # print('Finished!!')
+
+    go2pose(pointA)
+    input('===Press enter to go to the next point===\n')
+
+    go2pose(pointB)
+    input('===Press enter to go to the next point===\n')
+
+    go2pose(pointC)
+    input('===Press enter to go to the next point===\n')
+
+    go2pose(pointD)
+    input('===Press enter to go to the next point===\n')
+
+    go2pose(pointA)
+    print('Finished!!')
+
+    # print_pose()
