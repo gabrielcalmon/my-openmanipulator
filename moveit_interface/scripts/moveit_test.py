@@ -192,7 +192,7 @@ if __name__ == '__main__':
     """
     # ideia: calcular outworkspace através do comprimento do robô
     xstep=0.075
-    ystep=0.2
+    ystep=0.25
 
     pointA=[0.5147866096539608, 0.07352425677103026, 0.2379017918991315]
     pointB=[pointA[0]+xstep, pointA[1], pointA[2]]
