@@ -149,15 +149,16 @@ def go2init_pose():
     while not rospy.is_shutdown():
         pose_goal = geometry_msgs.msg.Pose()
         current_pose = group.get_current_pose().pose
+        pose_goal.position.x = 0.46567264870156727
+        pose_goal.position.y = 0.32583083817351666
+        pose_goal.position.z = 0.22664581792749117
 
-        pose_goal.orientation.x = 0.5147866096539608
-        pose_goal.orientation.y = 0.07352425677103026
-        pose_goal.orientation.z = 0.2379017918991315
+        pose_goal.orientation.x = -0.7069538807378075
+        pose_goal.orientation.y = -0.15652695555454
+        pose_goal.orientation.z = -0.013479088538918209
+        pose_goal.orientation.w = 0.6895896148193801
 
-        pose_goal.orientation.w = -0.7037410864776212
-        pose_goal.position.x = 0.10089453311810097
-        pose_goal.position.y = 0.20061463041243796
-        pose_goal.position.z = 0.6740345291264079
+        
 
         group.set_pose_target(pose_goal)
         plan = group.go(wait=True)
@@ -228,44 +229,84 @@ if __name__ == '__main__':
     # O end-effector comeca em 'A' e se move ao longo de um retangulo com lados zstep e ystep para, respectivamente, a altura e o comprimento, medidos em metros
     """
     # ideia: calcular outworkspace através do comprimento do robô
-    xstep=0.075
-    ystep=0.25
-
-    pointA=[0.5147866096539608, 0.07352425677103026, 0.2379017918991315]
-    pointB=[pointA[0]+xstep, pointA[1], pointA[2]]
-    pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
-    pointD=[pointC[0]-xstep, pointC[1], pointC[2]]
+    
 
 ## position test script
+    # zstep=0.2
+    # ystep=0.2
+
+    # pointA=[0.15499688221284214, 0.3258172746579836, 0.1389946113328881]
+    # pointB=[pointA[0], pointA[1], pointA[2]+zstep]
+    # pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
+    # pointD=[pointC[0], pointC[1], pointC[2]-zstep]
     # go2position(pointA)
-    # input('===Press enter to go to the next point===\n')
+    # #input('===Press enter to go to the next point===\n')
 
     # go2position(pointB)
-    # input('===Press enter to go to the next point===\n')
+    # #input('===Press enter to go to the next point===\n')
 
     # go2position(pointC)
-    # input('===Press enter to go to the next point===\n')
+    # #input('===Press enter to go to the next point===\n')
 
     # go2position(pointD)
-    # input('===Press enter to go to the next point===\n')
+    # #input('===Press enter to go to the next point===\n')
 
     # go2position(pointA)
     # print('Finished!!')
 
-## pose test script
+## pose test script (xy)
+    # xstep=0.075
+    # ystep=0.5
+
+    # #pointA=[0.5147866096539608, 0.07352425677103026, 0.2379017918991315]
+    # pointA = [0.46567264870156727, 0.32583083817351666, 0.22664581792749117]
+    # pointB=[pointA[0]+xstep, pointA[1], pointA[2]]
+    # pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
+    # pointD=[pointC[0]-xstep, pointC[1], pointC[2]]
+    # print('Going to home position')
+    # go2init_pose()
+    # #input('===Get at home position===')
+
+    # go2pose(pointA)
+    # #input('===Press enter to go to the next point===\n')
+
+    # go2pose(pointB)
+    # #input('===Press enter to go to the next point===\n')
+
+    # go2pose(pointC)
+    # #input('===Press enter to go to the next point===\n')
+
+    # go2pose(pointD)
+    # #input('===Press enter to go to the next point===\n')
+
+    # go2pose(pointA)
+    # print('Finished!!')
+    # print_pose()
+
+## pose test script (yz)
+    zstep=0.2
+    ystep=0.5
+
+    #pointA=[0.5147866096539608, 0.07352425677103026, 0.2379017918991315]
+    pointA = [0.46567264870156727, 0.32583083817351666, 0.22664581792749117]
+    pointB=[pointA[0], pointA[1], pointA[2]+zstep]
+    pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
+    pointD=[pointC[0], pointC[1], pointC[2]-zstep]
+    print('Going to home position')
     go2init_pose()
+    #input('===Get at home position===')
 
     go2pose(pointA)
-    input('===Press enter to go to the next point===\n')
+    #input('===Press enter to go to the next point===\n')
 
     go2pose(pointB)
-    input('===Press enter to go to the next point===\n')
+    #input('===Press enter to go to the next point===\n')
 
     go2pose(pointC)
-    input('===Press enter to go to the next point===\n')
+    #input('===Press enter to go to the next point===\n')
 
     go2pose(pointD)
-    input('===Press enter to go to the next point===\n')
+    #input('===Press enter to go to the next point===\n')
 
     go2pose(pointA)
     print('Finished!!')
