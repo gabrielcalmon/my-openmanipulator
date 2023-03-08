@@ -108,7 +108,6 @@ def go2position(position_list):
         group.set_position_target(position_list)
         plan = group.go(wait=True)
         group.stop()
-        #group.clear_position_targets()
         #group.execute(plan, wait=True)
         break
     #print('========================================')
@@ -136,7 +135,7 @@ def go2pose(position_list):
         group.set_pose_target(pose_goal)
         plan = group.go(wait=True)
         group.stop()
-        #group.clear_position_targets()
+        group.clear_pose_targets()
         #group.execute(plan, wait=True)
         break
 
@@ -163,9 +162,47 @@ def go2init_pose():
         group.set_pose_target(pose_goal)
         plan = group.go(wait=True)
         group.stop()
-        #group.clear_position_targets()
+        group.clear_pose_targets()
         #group.execute(plan, wait=True)
         break
+
+def cartesianMove():
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node("movit_joint_test", anonymous=True)
+    robot = moveit_commander.RobotCommander()
+    group_name = "arm"
+    group = moveit_commander.MoveGroupCommander(group_name)
+
+    waypoints = []
+
+    # start with the current pose
+    waypoints.append(group.get_current_pose().pose)
+
+    # first orient gripper and move forward (+x)
+    wpose = geometry_msgs.msg.Pose()
+    wpose.orientation.w = 1.0
+    wpose.position.x = waypoints[0].position.x + 0.1
+    wpose.position.y = waypoints[0].position.y
+    wpose.position.z = waypoints[0].position.z
+    waypoints.append(copy.deepcopy(wpose))
+
+    # second move down
+    wpose.position.z -= 0.10
+    waypoints.append(copy.deepcopy(wpose))
+
+    # third move to the side
+    wpose.position.y += 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    (plan3, fraction) = group.compute_cartesian_path(
+                             waypoints,   # waypoints to follow
+                             0.01,        # eef_step
+                             0.0)         # jump_threshold
+    group.go(wait=True)
+    # group.stop()
+
+    # print "============ Waiting while RVIZ displays plan3..."
+    # rospy.sleep(5)
 
 def print_pose():
     moveit_commander.roscpp_initialize(sys.argv)
@@ -199,6 +236,7 @@ if __name__ == '__main__':
     pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
     pointD=[pointC[0]-xstep, pointC[1], pointC[2]]
 
+## position test script
     # go2position(pointA)
     # input('===Press enter to go to the next point===\n')
 
@@ -214,6 +252,7 @@ if __name__ == '__main__':
     # go2position(pointA)
     # print('Finished!!')
 
+## pose test script
     go2init_pose()
 
     go2pose(pointA)
@@ -231,3 +270,5 @@ if __name__ == '__main__':
     go2pose(pointA)
     print('Finished!!')
     print_pose()
+
+    #cartesianMove()
