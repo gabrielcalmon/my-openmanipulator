@@ -218,6 +218,50 @@ def print_pose():
         print(current_pose)
         rospy.sleep(1)
 
+def init_ang():
+    group_name = "arm"
+    group = moveit_commander.MoveGroupCommander(group_name)
+    joint_goal = group.get_current_joint_values()
+    joint_goal[0] = 0 * pi / 180
+    joint_goal[1] = 21 * pi / 180
+    joint_goal[2] = 20 * pi / 180
+    joint_goal[3] = 0 * pi / 180
+    joint_goal[4] = 0 * pi /180
+    joint_goal[5] = 0 * pi /180
+
+    group.go(joint_goal, wait=True)
+    rospy.sleep(1)
+    group.stop()
+    rospy.sleep(1)
+
+def demo_function():
+    zstep=0.2
+    ystep=0.6
+
+    pointA = [0.46567264870156727, 0.32583083817351666, 0.22664581792749117]
+    pointB=[pointA[0], pointA[1], pointA[2]+zstep]
+    pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
+    pointD=[pointC[0], pointC[1], pointC[2]-zstep]
+    print('Going to home position')
+    go2init_pose()
+
+    input('===Press enter to use "position control"===\n')
+    go2position(pointA)
+    go2position(pointB)
+    go2position(pointC)
+    go2position(pointD)
+    go2position(pointA)
+
+    input('===Press enter to use "pose control"===\n')
+    go2init_pose()
+    go2pose(pointA)
+    go2pose(pointB)
+    go2pose(pointC)
+    go2pose(pointD)
+    go2pose(pointA)
+    print('Finished!!')
+
+
 if __name__ == '__main__':
     #main2()
     """
@@ -284,32 +328,34 @@ if __name__ == '__main__':
     # print_pose()
 
 ## pose test script (yz)
-    zstep=0.2
-    ystep=0.5
+    # zstep=0.2
+    # ystep=0.5
 
-    #pointA=[0.5147866096539608, 0.07352425677103026, 0.2379017918991315]
-    pointA = [0.46567264870156727, 0.32583083817351666, 0.22664581792749117]
-    pointB=[pointA[0], pointA[1], pointA[2]+zstep]
-    pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
-    pointD=[pointC[0], pointC[1], pointC[2]-zstep]
-    print('Going to home position')
-    go2init_pose()
-    #input('===Get at home position===')
+    # #pointA=[0.5147866096539608, 0.07352425677103026, 0.2379017918991315]
+    # pointA = [0.46567264870156727, 0.32583083817351666, 0.22664581792749117]
+    # pointB=[pointA[0], pointA[1], pointA[2]+zstep]
+    # pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
+    # pointD=[pointC[0], pointC[1], pointC[2]-zstep]
+    # print('Going to home position')
+    # go2init_pose()
+    # #input('===Get at home position===')
 
-    go2pose(pointA)
-    #input('===Press enter to go to the next point===\n')
+    # go2pose(pointA)
+    # #input('===Press enter to go to the next point===\n')
 
-    go2pose(pointB)
-    #input('===Press enter to go to the next point===\n')
+    # go2pose(pointB)
+    # #input('===Press enter to go to the next point===\n')
 
-    go2pose(pointC)
-    #input('===Press enter to go to the next point===\n')
+    # go2pose(pointC)
+    # #input('===Press enter to go to the next point===\n')
 
-    go2pose(pointD)
-    #input('===Press enter to go to the next point===\n')
+    # go2pose(pointD)
+    # #input('===Press enter to go to the next point===\n')
 
-    go2pose(pointA)
-    print('Finished!!')
-    print_pose()
+    # go2pose(pointA)
+    # print('Finished!!')
+    # print_pose()
 
-    #cartesianMove()
+    cartesianMove()
+    #init_ang()
+    #demo_function()
