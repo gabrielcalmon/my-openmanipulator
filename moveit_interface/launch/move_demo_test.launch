@@ -1,0 +1,6 @@
+<launch>
+    <!-- <include file="$(find open_manipulator_p_controllers)/launch/joint_trajectory_controller.launch" /> -->
+    <node name="moveit_interface_demo" pkg="moveit_interface" type="moveit_test.py" respawn="false" output="screen">
+    </node>
+
+</launch>
