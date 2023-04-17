@@ -23,9 +23,10 @@ def joint_state_callback(data):
             # cria o cabecalho do csv CASO o arquivo esteja vazio
             if csv_file.tell() == 0:
                 writer.writerow(['time', 'pos_1', 'pos_2', 'pos_3', 'pos_4', 'pos_5', 'pos_6', 'vel_1', 'vel_2', 'vel_3', 'vel_4', 'vel_5', 'vel_6', 'eff_1', 'eff_2', 'eff_3', 'eff_4', 'eff_5', 'eff_6'])
+            write_list=list(data.position) + list(data.velocity) + list(data.effort)
+            formattedList = [data.header.stamp.to_sec()] + ["%.100f" % x for x in write_list]
+            writer.writerow(formattedList)
 
-            writer.writerow([data.header.stamp.to_sec()] + list(data.position) + list(data.velocity) + list(data.effort))
-    
 def joint_state_subscriber():
     rospy.init_node('joint_state_listener', anonymous=True)
 
