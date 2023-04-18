@@ -58,3 +58,5 @@ $ rosrun node_listener listener.py
 After run this command, the time series will be saved as .csv at src/time_series_csv with the name joint_states_{YYMMDD_HourMinuteSecond}.csv
 
 At the top of listener.py, the subsampling and point float precision can be changed
+*Note that the csv file will apply the comma as decimal marker instead of dot*
+*Note that it may be necessary to change the number format to scientific notation when importing the csv on your editing software*
