@@ -3,6 +3,7 @@
   <arg name="sim" default="true"/>
   <arg name="usb_port" default="/dev/ttyUSB0" />
   <arg name="with_gripper" default="false"/>
+  <arg name="use_gui"      default="false" />
 
   <!-- startup ros_control for real robot -->
   <group unless="$(arg sim)">
@@ -21,6 +22,15 @@
 
   <!-- controller utils -->
   <include file="$(find open_manipulator_p_hw)/launch/controller_utils.launch"/>
+
+  <!-- Send joint values --> 
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="/use_gui" value="$(arg use_gui)"/>
+    <rosparam param="source_list" subst_value="true">["joint_states"]</rosparam>
+  </node>
+
+  <!-- Combine joint values to TF-->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
   <!-- joint_trajectory_controller -->
   <group unless="$(arg sim)">
