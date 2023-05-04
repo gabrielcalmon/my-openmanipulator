@@ -51,6 +51,8 @@ $ roslaunch open_manipulator_p_controllers joint_trajectory_controller.launch si
 ## Data collection
 The package *node_listener* contain a script used to listen to the */joint_states* topic, which uses the *sensor_msgs/JointState* message type.
 
+First of all, run the inverse kinematics node, even to simulation or operation case. So, after that, run:
+
 ```bash
 $ rosrun node_listener listener.py
 ```

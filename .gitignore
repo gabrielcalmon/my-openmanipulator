@@ -52,3 +52,5 @@ qtcreator-*
 CATKIN_IGNORE
 .vscode/c_cpp_properties.json
 .vscode/settings.json
+open_manipulator_p/open_manipulator_p_description/urdf/.vscode/settings.json
+open_manipulator_p/open_manipulator_p_description/urdf/.vscode/c_cpp_properties.json

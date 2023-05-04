@@ -5,7 +5,7 @@ import csv
 import datetime
 
 sub_amostragem = 100 # so sera registrada no arquivo uma a cada N mensagens
-# por padrao /joint_states opera a 998hz
+# por padrao /joint_states opera a 990~1000hz
 #float_precision = 50
 
 now = datetime.datetime.now() # recebe o horario atual
