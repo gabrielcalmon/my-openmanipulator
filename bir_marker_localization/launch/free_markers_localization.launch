@@ -7,7 +7,7 @@
     <arg name="markers/prefix" default="id_"/>
     <arg name="markers/dictionary" default="11"/>
     <arg name="markers/lengths" default="[55]"/>
-    <arg name="camera/tf_name" default="camera"/>
+    <arg name="camera/tf_name" default="camera_link_optical"/>
     <!-- <arg name="camera/matrix" default="[500.0, 0.0, 0.0, 0.0, 500.0, 0.0, 0.0, 0.0, 1.0]" /> -->
     <arg name="camera/matrix" default="[806.63826, 0.0, 288.1348, 0.0, 809.52025, 232.06243 0.0, 0.0, 1.0]" />
     <!-- <arg name="camera/distortion" default="[0.0, 0.0, 0.0, 0.0, 0.0]" /> -->
@@ -45,5 +45,10 @@
         <remap from="detected_markers/pose" to="/detected_markers/output"/>
     </node>
 
-    <node pkg="tf2_ros" type="static_transform_publisher" name="artag0_" args="0.025 0.025 -0.025 0 0 0.707 0.707 id_4 box"/>
+    <node name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="/detected_markers/image"/>
+        <param name="autosize" value="true" />
+    </node>
+
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="artag0_" args="0.025 0.025 -0.025 0 0 0.707 0.707 id_4 box"/> -->
 </launch>
