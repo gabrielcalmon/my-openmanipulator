@@ -241,4 +241,6 @@
     </inertial>
   </link>
 
+  <xacro:include filename="camera.xacro" />
+
 </robot>
