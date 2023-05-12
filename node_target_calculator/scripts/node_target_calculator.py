@@ -7,17 +7,18 @@ import geometry_msgs.msg
 import turtlesim.srv
 
 if __name__ == '__main__':
-    rospy.init_node('tf2_endeffector2tag_listener')
+    rospy.init_node('tf2_world2tag_listener')
 
     tfBuffer = tf2_ros.Buffer()
     listener = tf2_ros.TransformListener(tfBuffer)
 
-    pose_target = rospy.Publisher('target_calculator/pose_endeffector2tag', geometry_msgs.msg.Pose, queue_size=1)
+    pose_target = rospy.Publisher('target_calculator/pose_world2tag', geometry_msgs.msg.Pose, queue_size=1)
 
     rate = rospy.Rate(1.0)
     while not rospy.is_shutdown():
         try:
-            transf = tfBuffer.lookup_transform('end_link', 'id_0', rospy.Time())
+            #transf = tfBuffer.lookup_transform('id_0','end_link',  rospy.Time()) #target_frame, source_frame
+            transf = tfBuffer.lookup_transform('world', 'id_0', rospy.Time()) #target_frame, source_frame
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             rate.sleep()
             continue
