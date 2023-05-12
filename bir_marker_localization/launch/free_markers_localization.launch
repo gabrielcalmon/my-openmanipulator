@@ -9,18 +9,19 @@
     <arg name="markers/lengths" default="[55]"/>
     <arg name="camera/tf_name" default="camera_link_optical"/>
     <!-- <arg name="camera/matrix" default="[500.0, 0.0, 0.0, 0.0, 500.0, 0.0, 0.0, 0.0, 1.0]" /> -->
-
-    <!-- ERRO NA LINHA ABAIXO -->
-    <arg name="camera/matrix" default="[827.69367, 0., 296.37425, 0., 829.46608, 222.1263 ,0., 0., 1.]" />
     <!-- <arg name="camera/distortion" default="[0.0, 0.0, 0.0, 0.0, 0.0]" /> -->
-    <!-- <arg name="camera/distortion" default="[0.090272, -0.147990, 0.001263, 0.001272, 0.000000]" /> -->
-    <arg name="camera/distortion" default="[0.049108, 0.144116, 0.001034, 0.001955, 0.000000]" />
+
+
+    <!-- <arg name="camera/matrix" default="[827.69367, 0., 296.37425, 0., 829.46608, 222.1263 ,0., 0., 1.]" />
+    <arg name="camera/distortion" default="[0.049108, 0.144116, 0.001034, 0.001955, 0.000000]" /> -->
     <arg name="markers_param_file" default="$(find marker_localization)/config/markers_config.yaml" />
     <arg name="sim" default="true"/>
     
 
     
     <group if="$(arg sim)">
+    <arg name="camera/matrix" default="[500.0, 0.0, 0.0, 0.0, 500.0, 0.0, 0.0, 0.0, 1.0]" />
+    <arg name="camera/distortion" default="[0.0, 0.0, 0.0, 0.0, 0.0]" />
         <node pkg="marker_localization" type="free_markers_localization" name="free_markers_localization" output="screen">
             <param name="enable/publish_image" value="$(arg enable/publish_image)"/>
             <param name="enable/publish_markers" value="$(arg enable/publish_markers)"/>
@@ -42,6 +43,8 @@
     </group>
 
     <group unless="$(arg sim)">
+    <arg name="camera/matrix" default="[827.69367, 0., 296.37425, 0., 829.46608, 222.1263 ,0., 0., 1.]" />
+    <arg name="camera/distortion" default="[0.049108, 0.144116, 0.001034, 0.001955, 0.000000]" />
         <node pkg="usb_cam" name="usb_cam" type="usb_cam_node">
             <param name="video_device" value="/dev/video0" />
             <param name="image_width" value="960" />
