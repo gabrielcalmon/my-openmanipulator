@@ -20,7 +20,8 @@
 
     
     <group if="$(arg sim)">
-    <arg name="camera/matrix" default="[500.0, 0.0, 0.0, 0.0, 500.0, 0.0, 0.0, 0.0, 1.0]" />
+    <!-- esse valores sao fornecidos pelo plugin do Gazebo no topico /camera_info; va nesse topico e traga para ca os referentes valores; essa comunicacao NAO e automatica -->
+    <arg name="camera/matrix" default="[792.6506348380574, 0.0, 480.5, 0.0, 792.6506348380574, 360.5, 0.0, 0.0, 1.0]" />
     <arg name="camera/distortion" default="[0.0, 0.0, 0.0, 0.0, 0.0]" />
         <node pkg="marker_localization" type="free_markers_localization" name="free_markers_localization" output="screen">
             <param name="enable/publish_image" value="$(arg enable/publish_image)"/>

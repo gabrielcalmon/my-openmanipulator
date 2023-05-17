@@ -8,7 +8,9 @@
         <parent link="link1"/>
         <child link="camera_link"/>
         <!-- <origin xyz="0 0.07 0.04" rpy="0 ${-pi/6} 0"/> -->
-        <origin xyz="0 0.07 0.04" rpy="0 ${-pi/18} 0"/>
+        <!-- <origin xyz="0 0.07 0.04" rpy="0 ${-pi/18} 0"/> -->
+        <origin xyz="0 0.14 0.14" rpy="0 0 0"/>
+        <!-- <origin xyz="0 1 1" rpy="0 0 0"/> -->
     </joint>
 
     <link name="camera_link">
@@ -48,7 +50,7 @@
             <visualize>true</visualize>
             <update_rate>10</update_rate>
             <camera>
-                <horizontal_fov>1.3962634</horizontal_fov>
+                <horizontal_fov>1.089</horizontal_fov>
                 <image>
                     <format>R8G8B8</format>
                     <width>960</width>
