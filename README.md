@@ -1,19 +1,26 @@
 # my-openmanipulator
 
+## Setup
 First, create your workspace
-```
+```bash
 $ mkdir ~/ws-manipulator/src -p
 ``` 
 
 Inside your workspace, on the src folder
-```
+```bash
 $ cd ~/ws-manipulator/src
 $ git clone https://github.com/gabrielcalmon/my-openmanipulator.git
+``` 
+
+Install the requirements:
+```bash
+$ sudo apt-get install ros-noetic-ros-controllers ros-noetic-gazebo* ros-noetic-moveit* ros-noetic-industrial-core
 ``` 
 
 ## Simulation
 After build and **source**, use the following commands.
 Note this commands are used to simulate the robot.
+
 ### Forward kinematics
 Allow the user to control the angle of each individual joint
 ```bash
@@ -32,6 +39,7 @@ $ roslaunch open_manipulator_p_controllers joint_trajectory_controller.launch si
 ## Operation
 After build and **source**, use the following commands.
 *Note this commands are used to control the robot itself, and not simulate.*
+
 ### Forward kinematics
 Allow the user to control the angle of each individual joint
 
