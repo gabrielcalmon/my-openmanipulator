@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from __future__ import print_function
 from six.moves import input
 
@@ -131,7 +131,7 @@ if __name__ == '__main__':
         # print('\n')
         # print(pose_msg)
         while not rospy.is_shutdown():
-            go2position([pose_msg.position.x-(my_sign(pose_msg.position.x)*safe_dist), pose_msg.position.y, pose_msg.position.z])
+            go2position([pose_msg.position.x-(my_sign(pose_msg.position.x)*safe_dist), pose_msg.position.y, pose_msg.position.z+0.2])
             print(pose_msg)
             #print('\n\POS GO2\n\n')
     except rospy.ROSInterruptException:
