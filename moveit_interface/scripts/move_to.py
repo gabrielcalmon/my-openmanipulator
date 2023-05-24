@@ -20,7 +20,7 @@ except:  # For Python 2 compatibility
 
     def dist(p, q):
         return sqrt(sum((p_i - q_i) ** 2.0 for p_i, q_i in zip(p, q)))
-    
+pose_msg = geometry_msgs.msg.Pose()
 def init_pose():
     group_name = "arm"
     group = moveit_commander.MoveGroupCommander(group_name)
@@ -48,12 +48,14 @@ def go2position(position_list):
         group.stop()
         #group.execute(plan, wait=True)
         break
+    return True # retorna valor verdadeiro para indicar que finalizou a execucao
     #print('========================================')
     #print()
 
 def go2pose(position_list):
     robot = moveit_commander.RobotCommander()
     group_name = "arm"
+    #rospy.sleep(1)
     group = moveit_commander.MoveGroupCommander(group_name)
     #group.set_goal_tolerance(0.1)
 
@@ -76,9 +78,16 @@ def go2pose(position_list):
         #group.execute(plan, wait=True)
         break
 
+def my_sign(x):
+    """retorna o sinal do numero passado (-1 ou +1) ou ainda 0 para valores nulos"""
+    return (x > 0) - (x < 0)
+
 def callback(incoming_pose):
-    safe_dist = 0.0
-    pose_msg = geometry_msgs.msg.Pose()
+    
+    global pose_msg
+    # print('\n[CALLBACK]')
+    # print(pose_msg)
+    #pose_msg = geometry_msgs.msg.Pose()
     pose_msg.position.x = incoming_pose.position.x
     pose_msg.position.y = incoming_pose.position.y
     pose_msg.position.z = incoming_pose.position.z
@@ -86,8 +95,10 @@ def callback(incoming_pose):
     pose_msg.orientation.y = incoming_pose.orientation.y
     pose_msg.orientation.z = incoming_pose.orientation.z
     pose_msg.orientation.w = incoming_pose.orientation.w
-    # esses valores somados sao um ajuste tecnico para contornar a diferenca entre a tf e a posicao real do aruco
-    go2position([pose_msg.position.x-safe_dist, pose_msg.position.y+0.25-safe_dist, pose_msg.position.z+0.20-safe_dist])
+    # a soma considerando o sinal da coordenada garante que o parametro de seguranca seja aplicado de forma a diminuir o modulo do ponto objetivo
+    
+    # print('\n[CALLBACK]')
+    # print(incoming_pose)
     #go2pose([pose_msg.position.x-safe_dist, pose_msg.position.y-safe_dist, pose_msg.position.z-safe_dist])
     # print(pose_msg.position)
 
@@ -97,18 +108,31 @@ def callback(incoming_pose):
     #rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
 
 def listener():
-    rospy.init_node('target_listener')
+    rospy.init_node('target_listener', anonymous=False)
 
-    rospy.Subscriber("target_calculator/pose_world2tag", geometry_msgs.msg.Pose, callback)
+    rospy.Subscriber("target_calculator/pose_tag2world", geometry_msgs.msg.Pose, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
 if __name__ == '__main__':
     try:
-        listener()
-        moveit_commander.roscpp_initialize(sys.argv)
-        rospy.init_node("moveit_joint_test", anonymous=True)
+        # listener()
+        # moveit_commander.roscpp_initialize(sys.argv)
+        # rospy.init_node("moveit_joint_test", anonymous=False)
         
+        rospy.init_node('target_listener', anonymous=False)
+
+        moveit_commander.roscpp_initialize(sys.argv)
+        rospy.Subscriber("target_calculator/pose_tag2world", geometry_msgs.msg.Pose, callback)
+
+        # spin() simply keeps python from exiting until this node is stopped
+        safe_dist = 0.05
+        # print('\n')
+        # print(pose_msg)
+        while not rospy.is_shutdown():
+            go2position([pose_msg.position.x-(my_sign(pose_msg.position.x)*safe_dist), pose_msg.position.y, pose_msg.position.z])
+            print(pose_msg)
+            #print('\n\POS GO2\n\n')
     except rospy.ROSInterruptException:
         pass
