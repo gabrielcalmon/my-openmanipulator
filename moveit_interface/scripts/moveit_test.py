@@ -139,6 +139,60 @@ def go2pose(position_list):
         #group.execute(plan, wait=True)
         break
 
+def go2pose_xy(position_list):
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node("movit_joint_test", anonymous=True)
+    robot = moveit_commander.RobotCommander()
+    group_name = "arm"
+    group = moveit_commander.MoveGroupCommander(group_name)
+
+    while not rospy.is_shutdown():
+        pose_goal = geometry_msgs.msg.Pose()
+        current_pose = group.get_current_pose().pose
+
+        pose_goal.orientation.x = current_pose.orientation.x
+        pose_goal.orientation.y = current_pose.orientation.y
+        pose_goal.orientation.z = current_pose.orientation.z
+        pose_goal.orientation.w = current_pose.orientation.w
+        pose_goal.position.x = position_list[0]
+        pose_goal.position.y = position_list[1]
+        pose_goal.position.z = current_pose.position.z
+
+        group.set_pose_target(pose_goal)
+        plan = group.go(wait=True)
+        group.stop()
+        group.clear_pose_targets()
+        #group.execute(plan, wait=True)
+        break
+
+def go2pose_z(position_z):
+    moveit_commander.roscpp_initialize(sys.argv)
+    rospy.init_node("movit_joint_test", anonymous=True)
+    robot = moveit_commander.RobotCommander()
+    group_name = "arm"
+    group = moveit_commander.MoveGroupCommander(group_name)
+
+    while not rospy.is_shutdown():
+        pose_goal = geometry_msgs.msg.Pose()
+        current_pose = group.get_current_pose().pose
+
+        pose_goal.orientation.x = current_pose.orientation.x
+        pose_goal.orientation.y = current_pose.orientation.y
+        pose_goal.orientation.z = current_pose.orientation.z
+        pose_goal.orientation.w = current_pose.orientation.w
+
+        pose_goal.position.x = current_pose.position.x
+        pose_goal.position.y = current_pose.position.y
+        pose_goal.position.z = position_z
+
+        print(current_pose)
+        group.set_pose_target(pose_goal)
+        plan = group.go(wait=True)
+        group.stop()
+        group.clear_pose_targets()
+        #group.execute(plan, wait=True)
+        break
+  
 def go2init_pose():
     moveit_commander.roscpp_initialize(sys.argv)
     rospy.init_node("movit_joint_test", anonymous=True)
@@ -336,17 +390,24 @@ if __name__ == '__main__':
     pointB=[pointA[0], pointA[1], pointA[2]+zstep]
     pointC=[pointB[0], pointB[1]-ystep, pointB[2]]
     pointD=[pointC[0], pointC[1], pointC[2]-zstep]
-    print('Going to home position')
-    go2init_pose()
+    #print('Going to home position')
+    #go2init_pose()
 
     # zy
-    input('===Press enter to use "pose control"===\n')
-    go2init_pose()
-    go2pose(pointA)
-    go2pose(pointB)
-    go2pose(pointC)
-    go2pose(pointD)
-    go2pose(pointA)
+    # input('===Press enter to use "pose control"===\n')
+    #go2init_pose()
+    # go2pose(pointA)
+    # go2pose(pointB)
+    # go2pose(pointC)
+    # go2pose(pointD)
+    # go2pose(pointA)
+
+    pointgoal = [0.4490318119261384, -0.022545023641873635, 0.11360713599276696]
+    # go2pose_z(0.22664581792749117)
+    # go2pose_xy([0.46567264870156727, 0.32583083817351666])
+
+    go2position(pointgoal)
+    
     print('Finished!!')
 
     # cartesianMove()

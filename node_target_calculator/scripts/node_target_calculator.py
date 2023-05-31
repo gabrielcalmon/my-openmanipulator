@@ -24,15 +24,10 @@ if __name__ == '__main__':
                 continue
 
             msg = geometry_msgs.msg.Pose()
-            #msg.position = transf.transform.translation
             
-            # msg.position.x = 0.3377399793376716
-            # msg.position.y = 0.15642701465270953
-            # msg.position.z = 0.21850777203918673
             msg.position = transf.transform.translation
             msg.orientation = transf.transform.rotation
 
-            print(msg)
             pose_target.publish(msg)
 
             rate.sleep()
