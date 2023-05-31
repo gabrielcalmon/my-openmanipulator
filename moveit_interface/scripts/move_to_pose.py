@@ -49,8 +49,6 @@ def go2position(position_list):
         #group.execute(plan, wait=True)
         break
     return True # retorna valor verdadeiro para indicar que finalizou a execucao
-    #print('========================================')
-    #print()
 
 def go2pose(position_list):
     robot = moveit_commander.RobotCommander()
@@ -83,11 +81,7 @@ def my_sign(x):
     return (x > 0) - (x < 0)
 
 def callback(incoming_pose):
-    
     global pose_msg
-    # print('\n[CALLBACK]')
-    # print(pose_msg)
-    #pose_msg = geometry_msgs.msg.Pose()
     pose_msg.position.x = incoming_pose.position.x
     pose_msg.position.y = incoming_pose.position.y
     pose_msg.position.z = incoming_pose.position.z
@@ -95,44 +89,20 @@ def callback(incoming_pose):
     pose_msg.orientation.y = incoming_pose.orientation.y
     pose_msg.orientation.z = incoming_pose.orientation.z
     pose_msg.orientation.w = incoming_pose.orientation.w
-    # a soma considerando o sinal da coordenada garante que o parametro de seguranca seja aplicado de forma a diminuir o modulo do ponto objetivo
-    
-    # print('\n[CALLBACK]')
-    # print(incoming_pose)
-    #go2pose([pose_msg.position.x-safe_dist, pose_msg.position.y-safe_dist, pose_msg.position.z-safe_dist])
-    # print(pose_msg.position)
 
-    #go2pose([0.46567264870156727, 0.32583083817351666, 0.22664581792749117])
-    #go2position([0.46567264870156727, 0.32583083817351666, 0.22664581792749117])
-    #print(incoming_pose)
     #rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
 
-def listener():
-    rospy.init_node('target_listener', anonymous=False)
-
-    rospy.Subscriber("target_calculator/pose_tag2world", geometry_msgs.msg.Pose, callback)
-
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
-
 if __name__ == '__main__':
-    try:
-        # listener()
-        # moveit_commander.roscpp_initialize(sys.argv)
-        # rospy.init_node("moveit_joint_test", anonymous=False)
-        
+    try:      
         rospy.init_node('target_listener', anonymous=False)
 
         moveit_commander.roscpp_initialize(sys.argv)
         rospy.Subscriber("target_calculator/pose_tag2world", geometry_msgs.msg.Pose, callback)
 
-        # spin() simply keeps python from exiting until this node is stopped
-        safe_dist = 0.05
-        # print('\n')
-        # print(pose_msg)
+        safe_dist_x = 0.05    # aplica um offset no eixo fim, a fim de que o end-effector nao se sobreponha ao aruco
+
         while not rospy.is_shutdown():
-            go2position([pose_msg.position.x-(my_sign(pose_msg.position.x)*safe_dist), pose_msg.position.y, pose_msg.position.z])
-            print(pose_msg)
-            #print('\n\POS GO2\n\n')
+            # a soma considerando o sinal da coordenada garante que o parametro de seguranca seja aplicado de forma a diminuir o modulo do ponto objetivo
+            go2position([pose_msg.position.x-(my_sign(pose_msg.position.x)*safe_dist_x), pose_msg.position.y, pose_msg.position.z])
     except rospy.ROSInterruptException:
         pass
