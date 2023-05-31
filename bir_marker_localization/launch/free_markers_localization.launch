@@ -44,10 +44,13 @@
     </group>
 
     <group unless="$(arg sim)">
-    <arg name="camera/matrix" default="[827.69367, 0., 296.37425, 0., 829.46608, 222.1263 ,0., 0., 1.]" />
-    <arg name="camera/distortion" default="[0.049108, 0.144116, 0.001034, 0.001955, 0.000000]" />
+    <!-- <arg name="camera/matrix" default="[827.69367, 0., 296.37425, 0., 829.46608, 222.1263 ,0., 0., 1.]" /> -->
+    <!-- <arg name="camera/distortion" default="[0.049108, 0.144116, 0.001034, 0.001955, 0.000000]" /> -->
+
+    <arg name="camera/matrix" default="[1183.69064, 0., 461.47801, 0., 1186.1602, 318.03018, 0., 0., 1.]" />
+    <arg name="camera/distortion" default="[0.103286, -0.233045, -0.006974, 0.016514, 0.000000]" />
         <node pkg="usb_cam" name="usb_cam" type="usb_cam_node">
-            <param name="video_device" value="/dev/video0" />
+            <param name="video_device" value="/dev/video2" />
             <param name="image_width" value="960" />
             <param name="image_height" value="720" />
             <param name="pixel_format" value="yuyv" />
