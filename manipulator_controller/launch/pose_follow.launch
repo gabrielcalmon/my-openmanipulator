@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="sim" default="true"/>
+
+  <!-- startup simulated world -->
+    <include file="$(find open_manipulator_p_controllers)/launch/joint_trajectory_controller.launch">
+        <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <include file="$(find marker_localization)/launch/free_markers_localization.launch">
+        <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <node pkg="node_target_calculator" type="node_target_calculator.py" name="target_calculator_node" output="screen"/>
+
+    <!-- <node pkg="moveit_interface" type="move_to_position.py" name="move_to_position_node" output="screen" respawn="true"/> -->
+</launch>

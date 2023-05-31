@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="sim" default="true"/>
+
+  <!-- startup simulated world -->
+    <include file="$(find open_manipulator_p_controllers)/launch/joint_trajectory_controller.launch">
+        <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <include file="$(find marker_localization)/launch/free_markers_localization.launch">
+        <arg name="sim" value="$(arg sim)"/>
+    </include>
+
+    <node pkg="node_target_calculator" type="node_target_calculator.py" name="target_calculator_node" output="screen"/>
+
+    <node pkg="moveit_interface" type="move_to_position.py" name="move_to_position_node" output="screen" respawn="true"/>
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <!-- <include file="$(find open_manipulator_p_description)/launch/open_manipulator_p_upload.launch">
+    <arg name="with_gripper" value="$(arg with_gripper)"/>
+  </include> -->
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <!-- <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model robot -z 0.0 -param robot_description"/> -->
+</launch>

@@ -70,3 +70,13 @@ After run this command, the time series will be saved as .csv at src/time_series
 At the top of listener.py, the subsampling and point float precision can be changed
 *Note that the csv file will apply the comma as decimal marker instead of dot*
 *Note that it may be necessary to change the number format to scientific notation when importing the csv on your editing software*
+
+## ArUco Follower
+### Position Follow
+The manipulator will try to follow the **position** of the ArUco when it is detected. Keep in mind, that there is no orientation specification, there are multiple valid solutions to achieve the same point, which causes the robot to rotate around the same point.
+
+```bash
+$ roslaunch manipulator_controller position_follow.launch sim:=true
+```
+
+The "sim" specify if it will run simulation or not
