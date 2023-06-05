@@ -59,7 +59,9 @@ def go2pose(pose_list, x_offset=0, y_offset=0, z_offset=0):
     group_name = "arm"
     #rospy.sleep(1)
     group = moveit_commander.MoveGroupCommander(group_name)
-    # group.set_goal_tolerance(0.005)
+    # group.set_num_planning_attempts(5)  # Definir o número máximo de iterações do planejador
+    # group.set_planning_time(15)
+    # group.set_goal_position_tolerance(0.01)
     # group.setGoalOrientationTolerance(0.01)
     # group.set_goal_tolerance(0.1)
 
@@ -81,14 +83,53 @@ def go2pose(pose_list, x_offset=0, y_offset=0, z_offset=0):
         plan = group.go(wait=True)
         group.stop()
         group.clear_pose_targets()
-
-        """# Gerar um plano aproximado para a pose inicial
-        plan_approx = group.plan()
-
-        # Executar o plano aproximado
-        group.execute(plan_approx)
-        #group.execute(plan, wait=True)"""
         break
+
+
+def go2poseOptmized(pose_list, x_offset=0, y_offset=0, z_offset=0):
+    robot = moveit_commander.RobotCommander()
+    group_name = "arm"
+    #rospy.sleep(1)
+    group = moveit_commander.MoveGroupCommander(group_name)
+    # group.set_goal_tolerance(0.005)
+    # group.setGoalOrientationTolerance(0.01)
+    # group.set_goal_tolerance(0.1)
+
+    while not rospy.is_shutdown():
+        rotation_goal = geometry_msgs.msg.Pose()
+        pose_goal = geometry_msgs.msg.Pose()
+        current_pose = group.get_current_pose().pose
+
+        # rotation_goal.position.x = current_pose.position.x
+        # rotation_goal.position.y = current_pose.position.y
+        # rotation_goal.position.z = current_pose.position.z
+        rotation_goal.orientation.x = pose_list.orientation.x
+        rotation_goal.orientation.y = pose_list.orientation.y
+        rotation_goal.orientation.z = pose_list.orientation.z
+        rotation_goal.orientation.w = pose_list.orientation.w
+
+        pose_goal.orientation.x = pose_list.orientation.x
+        pose_goal.orientation.y = pose_list.orientation.y
+        pose_goal.orientation.z = pose_list.orientation.z
+        pose_goal.orientation.w = pose_list.orientation.w
+
+        pose_goal.position.x = pose_list.position.x-(my_sign(pose_msg.position.x)*x_offset)
+        pose_goal.position.y = pose_list.position.y-(my_sign(pose_msg.position.y)*y_offset)
+        pose_goal.position.z = pose_list.position.z-(my_sign(pose_msg.position.z)*z_offset)
+
+        group.set_pose_target(rotation_goal)
+        
+        plan = group.go(wait=True)
+        group.stop()
+        group.clear_pose_targets()
+
+        # group.set_pose_target(pose_goal)
+        
+        # plan = group.go(wait=True)
+        # group.stop()
+        # group.clear_pose_targets()
+        break
+
 
 def my_sign(x):
     """retorna o sinal do numero passado (-1 ou +1) ou ainda 0 para valores nulos"""
@@ -109,6 +150,7 @@ def callback(incoming_pose):
 def visualize_pose():
     """
     funcao para fins de debug que permite vizualizar as poses no rviz
+    tambem aplica a rotacao e o deslocamento em z
     """
 
     global pose_msg
@@ -163,5 +205,6 @@ if __name__ == '__main__':
             # go2position([pose_msg.position.x-(my_sign(pose_msg.position.x)*safe_dist_x), pose_msg.position.y, pose_msg.position.z])
             visualize_pose()
             go2pose(pose_msg)
+            #go2pose(pose_msg)
     except rospy.ROSInterruptException:
         pass
