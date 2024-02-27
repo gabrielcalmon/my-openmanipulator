@@ -9,7 +9,7 @@ camera_matrix: [554.254691191187, 0.0, 0.0, 0.0, 554.254691191187, 0.0, 0.0, 0.0
 camera_distortion: [0.0, 0.0, 0.0, 0.0, 0.0]
 image_topic: /usb_camera/image_raw
 markers_dictionary: 11
-markers_length: [55] # length in mm.
+markers_length: [70] # length in mm.
 markers_200: [0, 1, 2, 3, 4, 5, 6, 12, 13, 14, 15, 16, 17, 18, 207] # Markers id with length 0.
 markers_sufix: id_
 static_camera_transform: false
